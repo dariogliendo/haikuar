@@ -9,7 +9,7 @@ openai.api_key = os.getenv("OPEN_AI_KEY")
 PROMPTS = [
     "un haiku en lenguaje argentino como si fuera una letra del indio solari",
     "escribe un haiku como si fueras un argentino",
-    "escribe un tweet bien argentino, no uses hashtags",
+    "hacé un haiku en estilo y lenguaje argentino",
     "un poema argentino en menos de 200 caracteres"
 ]
 
@@ -38,4 +38,3 @@ schedule.every(12).hours.do(tweet)
 
 while True:
     schedule.run_pending()
-
