@@ -3,6 +3,7 @@ import os
 import openai
 import random
 import schedule
+import traceback
 client = create_client()
 
 openai.api_key = os.getenv("OPEN_AI_KEY")
@@ -18,22 +19,33 @@ def on_schedule():
 
 
 def prompt_gpt():
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=random.choice(PROMPTS),
-        temperature=0.7,
-        max_tokens=256,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
-    )
-    return str(response.choices[0].text)
+    try:
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=random.choice(PROMPTS),
+            temperature=0.7,
+            max_tokens=256,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        return str(response.choices[0].text)
+    except:
+        print("Algo salió mal con OpenAI")
+        return(False)
 
 def tweet():
-    haiku=prompt_gpt()
-    client.create_tweet(text=haiku)
-    print('tweet \n\n' + haiku + '\n\n realizado')
+    try:
+        haiku=prompt_gpt()
+        if haiku == False:
+            return
+        client.create_tweet(text=haiku)
+        print('tweet \n\n' + haiku + '\n\n realizado')
+    except Exception:
+        print('Algo salió mal con twitter')
+        traceback.print_exc()
 
+tweet()
 schedule.every(12).hours.do(tweet)
 
 while True:
